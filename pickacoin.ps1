@@ -9,6 +9,22 @@ $ETHperDay = (Invoke-WebRequest https://www.cruxpool.com/api/eth/estimatedEarnin
 $NiceHash = (Invoke-WebRequest 'https://whattomine.com/coins.json?adapt_q_570=1&adapt_570=true&eth=true&factor%5Beth_hr%5D=27.90&factor%5Beth_p%5D=101.00&factor%5Bcost%5D=0&sort=Profitability24&volume=0&revenue=24h&dataset=&commit=Calculate.json' | ConvertFrom-Json | Select -expand coins | Select -expand "Nicehash-Ethash")[0]."btc_revenue24"
 $Nicehash = [convert]::ToDecimal($NiceHash) * [convert]::ToDecimal((Invoke-WebRequest https://api.pro.coinbase.com/products/BTC-USD/ticker | ConvertFrom-Json | Select -expand price))
 
-echo $ETCperDay
-echo $ETHperDay
-echo $NiceHash
+echo "ETC Rev: $"$ETCperDay
+echo "ETH Rev: $"$ETHperDay
+echo "Nicehash Rev $"$NiceHash
+
+IF ($ETCperDay -gt $ETHperDay -and $ETCperDay -gt $Nicehash) {
+    echo "Starting ETC Miner..."
+    }
+    ElseIf ($ETHperDay -gt $ETCperDay -and $ETHperDay -gt $NiceHash) {
+    echo "Starting ETH Miner..."
+    }
+    ElseIf ($NiceHash -gt $ETCperDay -and $NiceHash -gt $ETHperDay) {
+    echo "Starting Nicehash..."
+    }
+    Else {
+    echo "Something went wrong."
+    }
+
+
+pause
